@@ -89,13 +89,13 @@ namespace ShoppingCart.Business.Modules
 
         public void Print()
         {
-            var orderedProductItemsByCategory = productItems.OrderBy(x => x.Key.Category);
+            List<Product> orderedProductItemsByCategory = productItems.Keys.OrderBy(x => x.Category.Title).ToList();
 
-            Console.WriteLine("Category Name\tProduct Name\tQuantity\tUnit Price");
+            Console.WriteLine("|{0,15}|{1,15}|{2,15}|{3,15}|", "Category Name", "Product Name", "Quantity", "Unit Price");
 
             foreach (var item in orderedProductItemsByCategory)
             {
-                Console.WriteLine("{0}\t\t{1}\t\t{2}\t\t{3}", item.Key.Category.Title, item.Key.Title, item.Value, item.Key.Price);
+                Console.WriteLine("|{0,15}|{1,15}|{2,15}|{3,15}|", item.Category.Title, item.Title, productItems[item], item.Price);
             }
             Console.WriteLine("Total Price:{0}\tTotal Discount:{1}", TotalAmount, CampaignDiscount + CouponDiscount);
             Console.WriteLine("Total Amount:{0}\nDelivery Cost:{1}", GetTotalAmountAfterDiscounts(), GetDeliveryCost());
