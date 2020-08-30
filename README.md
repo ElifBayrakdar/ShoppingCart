@@ -5,4 +5,4 @@ Used xUnit as unit test framework
 
 Used Moq as mock framework
 
-Full implementation example of Abstract Factory Pattern
+Full implementation example of Factory Method Pattern
