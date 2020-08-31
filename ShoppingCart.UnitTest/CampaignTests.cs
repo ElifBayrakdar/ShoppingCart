@@ -9,19 +9,51 @@ namespace ShoppingCart.UnitTest
 {
     public class CampaignTests
     {
+
         [Fact]
-        public void GetDiscount_WhenCalledForAmountCampaign_ReturnsDiscount()
+        public void ProduceCampaign_WhenCalledForAmountCampaign_ReturnsAmountCampaignObject()
         {
             //Arrange
             Category category = new Category("Food");
             CampaignFactory factory = new CampaignFactory();
-            ICampaign campaign = factory.ProduceCampaign(category, 20, 3, DiscountType.Amount);
 
             //Act
-            double discount = campaign.GetDiscount(120);
+            ICampaign coupon = factory.ProduceCampaign(category, 50, 10, DiscountType.Amount);
 
             //Assert
-            Assert.Equal(campaign.Discount, discount);
+            Assert.IsType<AmountCampaign>(coupon);
+        }
+
+        [Fact]
+        public void GetDiscount_WhenCalledForAmountCampaign_ReturnsDiscount()
+        {
+            //Arrange
+            double discountAmount = 10;
+            double totalPrice = 200;
+            double expectedDiscount = 10;
+            Category category = new Category("Food");
+            CampaignFactory factory = new CampaignFactory();
+            AmountCampaign campaign = factory.ProduceCampaign(category, 20, 3, DiscountType.Amount) as AmountCampaign;
+
+            //Act
+            double discount = campaign.GetDiscount(totalPrice);
+
+            //Assert
+            Assert.Equal(expectedDiscount, discountAmount);
+        }
+
+        [Fact]
+        public void ProduceCampaign_WhenCalledForRateCampaign_ReturnsRateCampaignObject()
+        {
+            //Arrange
+            Category category = new Category("Food");
+            CampaignFactory factory = new CampaignFactory();
+
+            //Act
+            ICampaign coupon = factory.ProduceCampaign(category, 50, 10, DiscountType.Rate);
+
+            //Assert
+            Assert.IsType<RateCampaign>(coupon);
         }
 
         [Fact]
@@ -29,14 +61,14 @@ namespace ShoppingCart.UnitTest
         {
             //Arrange
             double discountRate = 10;
-            double givenAmount = 200;
+            double totalPrice = 200;
             double expectedDiscount = 20;
             Category category = new Category("Food");
             CampaignFactory factory = new CampaignFactory();
-            ICampaign campaign = factory.ProduceCampaign(category, discountRate, 3, DiscountType.Rate);
+            RateCampaign campaign = factory.ProduceCampaign(category, discountRate, 3, DiscountType.Rate) as RateCampaign;
 
             //Act
-            double discount = campaign.GetDiscount(givenAmount);
+            double discount = campaign.GetDiscount(totalPrice);
 
             //Assert
             Assert.Equal(expectedDiscount, discount);

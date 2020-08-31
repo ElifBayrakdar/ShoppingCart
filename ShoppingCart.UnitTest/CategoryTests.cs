@@ -26,7 +26,7 @@ namespace ShoppingCart.UnitTest
             //Arrange & Act
             Category foodCategory = new Category("Food");
             CampaignFactory campaignFactory = new CampaignFactory();
-            ICampaign campaign = campaignFactory.ProduceCampaign(foodCategory, 10, 2, Business.DiscountType.Amount);
+            AmountCampaign campaign = campaignFactory.ProduceCampaign(foodCategory, 10, 2, Business.DiscountType.Amount) as AmountCampaign;
 
             //Assert
             Assert.Contains(campaign, foodCategory.campaigns);            
