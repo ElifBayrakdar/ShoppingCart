@@ -20,6 +20,11 @@ namespace ShoppingCart.Business.Modules
             this.calculator = calculator;
         }
 
+        /// <summary>
+        /// adds new product with quantity info
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="quantity"></param>
         public void AddItem(Product product, int quantity)
         {
             if (product is null)
@@ -37,6 +42,10 @@ namespace ShoppingCart.Business.Modules
             TotalAmount += product.Price * quantity;
         }
 
+        /// <summary>
+        /// applies max discount to cart for campaigns
+        /// </summary>
+        /// <param name="campaigns"></param>
         public void ApplyDiscounts(params ICampaign[] campaigns)
         {
             double discount = 0;
@@ -61,7 +70,10 @@ namespace ShoppingCart.Business.Modules
             CampaignDiscount = maxDiscount;
         }
 
-
+        /// <summary>
+        /// applies discount to cart for coupon
+        /// </summary>
+        /// <param name="coupon"></param>
         public void ApplyCoupon(ICoupon coupon)
         {
             if(coupon is null)
@@ -73,26 +85,45 @@ namespace ShoppingCart.Business.Modules
             }
         }
 
+        /// <summary>
+        /// gets the total amount after all discounts applied
+        /// </summary>
+        /// <returns></returns>
         public double GetTotalAmountAfterDiscounts()
         {
             return TotalAmount - CampaignDiscount - CouponDiscount;
         }
 
+        /// <summary>
+        /// gets the discount of coupon
+        /// </summary>
+        /// <returns></returns>
         public double GetCouponDiscount()
         {
             return CouponDiscount;
         }
 
+        /// <summary>
+        /// gets the campaign discount which applied to cart
+        /// </summary>
+        /// <returns></returns>
         public double GetCampaignDiscount()
         {
             return CampaignDiscount;
         }
 
+        /// <summary>
+        /// gets delivery cost of cart
+        /// </summary>
+        /// <returns></returns>
         public double GetDeliveryCost()
         {
             return calculator.CalculateFor(this);
         }
 
+        /// <summary>
+        /// prints the billing details
+        /// </summary>
         public void Print()
         {
             List<Product> orderedProductItemsByCategory = productItems.Keys.OrderBy(x => x.Category.Title).ToList();

@@ -14,7 +14,7 @@ namespace ShoppingCart.Business.Modules
         void AddItem(Product product, int quantity);
 
         /// <summary>
-        /// applies max discount to cart for campaigns
+        /// applies discount to cart for campaigns
         /// </summary>
         /// <param name="campaigns"></param>
         void ApplyDiscounts(params ICampaign[] campaigns);

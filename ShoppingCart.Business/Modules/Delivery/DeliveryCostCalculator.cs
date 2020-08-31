@@ -28,6 +28,11 @@ namespace ShoppingCart.Business.Modules
             this.FixedCost = fixedCost;
         }
 
+        /// <summary>
+        /// calculates the delivery cost
+        /// </summary>
+        /// <param name="cart"></param>
+        /// <returns></returns>
         public double CalculateFor(Cart cart)
         {
             if(cart is null)

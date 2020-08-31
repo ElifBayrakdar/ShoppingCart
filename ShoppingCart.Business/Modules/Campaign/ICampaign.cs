@@ -12,12 +12,12 @@ namespace ShoppingCart.Business.Modules
         ICategory Category { get; set; }
 
         /// <summary>
-        /// Discount (represents rate or amount)
+        /// Discount (based on DiscountType)
         /// </summary>
         double Discount { get; set; }
 
         /// <summary>
-        /// min item count to apply the discount
+        /// item count to apply the discount
         /// </summary>
         int ItemCount { get; set; }
 
