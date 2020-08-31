@@ -22,6 +22,9 @@ namespace ShoppingCart.Business.Modules
 
         public void AddItem(Product product, int quantity)
         {
+            if (product is null)
+                throw new ArgumentNullException(nameof(product));
+
             if (productItems.ContainsKey(product))
             {
                 productItems[product] += quantity;
@@ -61,6 +64,9 @@ namespace ShoppingCart.Business.Modules
 
         public void ApplyCoupon(ICoupon coupon)
         {
+            if(coupon is null)
+                throw new ArgumentNullException(nameof(coupon));
+
             if (TotalAmount >= coupon.MinPurchaseAmount)
             {
                 CouponDiscount = coupon.GetDiscount(TotalAmount - CampaignDiscount);

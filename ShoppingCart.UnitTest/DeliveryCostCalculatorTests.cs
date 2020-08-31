@@ -16,8 +16,8 @@ namespace ShoppingCart.UnitTest
             DeliveryCostCalculator calculator = new DeliveryCostCalculator(1, 2, 2.99d);
             Cart shoppingCart = new Cart(calculator);
 
-            //Action && Assert
-            var exception = Assert.Throws<Exception>(() => calculator.CalculateFor(shoppingCart));
+            //Act && Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => calculator.CalculateFor(shoppingCart));
             Assert.Equal("Shopping Cart is empty!", exception.Message);
         }
 
@@ -27,7 +27,7 @@ namespace ShoppingCart.UnitTest
             //Arrange
             DeliveryCostCalculator calculator = new DeliveryCostCalculator(1, 2, 2.99d);
 
-            //Action && Assert
+            //Act && Assert
             var exception = Assert.Throws<InvalidOperationException>(() => calculator.CalculateFor(null));
             Assert.Equal("There is no cart!", exception.Message);
         }
@@ -42,7 +42,7 @@ namespace ShoppingCart.UnitTest
             Cart shoppingCart = new Cart(calculator);
             shoppingCart.AddItem(banana, 5);
 
-            //Action
+            //Act
             double deliveryCost = calculator.CalculateFor(shoppingCart);
 
             //Assert

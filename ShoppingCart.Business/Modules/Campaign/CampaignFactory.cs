@@ -12,6 +12,10 @@ namespace ShoppingCart.Business.Modules
         //Factory method pattern
         public ICampaign ProduceCampaign(Category category, double discount, int itemCount, DiscountType discountType)
         {
+            if (category is null)
+            {
+                throw new ArgumentNullException(nameof(category));
+            }
             ICampaign campaign = null;
             switch (discountType)
             {

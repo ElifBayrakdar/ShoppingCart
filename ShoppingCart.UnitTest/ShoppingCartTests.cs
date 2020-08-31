@@ -27,6 +27,18 @@ namespace ShoppingCart.UnitTest
         }
 
         [Fact]
+        public void AddItem_WhenCalledWithNullProductObject_ThrowsException()
+        {
+            //Arrange
+            Mock<IDeliveryCostCalculator> mockCalculator = new Mock<IDeliveryCostCalculator>();
+            Cart shoppingCart = new Cart(mockCalculator.Object);
+
+            //Act && Assert
+            var exception = Assert.Throws<ArgumentNullException>(() => shoppingCart.AddItem(null, 5));
+            Assert.Equal("Value cannot be null. (Parameter 'product')", exception.Message);
+        }
+
+        [Fact]
         public void AddItem_WhenCalled_ChangeTheTotalAmount()
         {
             //Arrange
@@ -79,12 +91,10 @@ namespace ShoppingCart.UnitTest
             Product banana = new Product("Banana", 10, category);
 
             Mock<ICampaign> mockCampaign1 = new Mock<ICampaign>();
-            mockCampaign1.Setup(mock => mock.GetDiscount(It.IsAny<double>())).Returns(5);
             mockCampaign1.Setup(mock => mock.ItemCount).Returns(15);
             mockCampaign1.Setup(mock => mock.Category).Returns(category);
 
             Mock<ICampaign> mockCampaign2 = new Mock<ICampaign>();
-            mockCampaign2.Setup(mock => mock.GetDiscount(It.IsAny<double>())).Returns(10);
             mockCampaign2.Setup(mock => mock.ItemCount).Returns(20);
             mockCampaign2.Setup(mock => mock.Category).Returns(category);
 
@@ -98,6 +108,29 @@ namespace ShoppingCart.UnitTest
 
             //Assert
             Assert.Equal(0, shoppingCart.CampaignDiscount);
+        }
+
+        [Fact]
+        public void ApplyDiscounts_WhenCartIsNotWithValidProductCountForCampaigns_DoesntCallGetDsicount()
+        {
+            //Arrange
+            Category category = new Category("Food");
+            Product banana = new Product("Banana", 10, category);
+
+            Mock<ICampaign> mockCampaign1 = new Mock<ICampaign>();
+            mockCampaign1.Setup(mock => mock.ItemCount).Returns(15);
+            mockCampaign1.Setup(mock => mock.Category).Returns(category);
+
+            Mock<IDeliveryCostCalculator> mockCalculator = new Mock<IDeliveryCostCalculator>();
+
+            Cart shoppingCart = new Cart(mockCalculator.Object);
+            shoppingCart.AddItem(banana, 5);
+
+            //Act
+            shoppingCart.ApplyDiscounts(mockCampaign1.Object);
+
+            //Assert
+            mockCampaign1.Verify(m => m.GetDiscount(It.IsAny<double>()), Times.Never);
         }
 
         [Fact]
@@ -140,6 +173,41 @@ namespace ShoppingCart.UnitTest
 
             //Assert
             Assert.Equal(0, shoppingCart.CouponDiscount);
+        }
+
+        [Fact]
+        public void ApplyCoupon_WhenCartIsNotWithMinPurchaseAmountForCoupon_DoesntCallGetDiscount()
+        {
+            //Arrange
+            Category category = new Category("Food");
+            Product banana = new Product("Banana", 10, category);
+            Mock<IDeliveryCostCalculator> mockCalculator = new Mock<IDeliveryCostCalculator>();
+            Cart shoppingCart = new Cart(mockCalculator.Object);
+            shoppingCart.AddItem(banana, 6);
+
+            Mock<ICoupon> mockCoupon = new Mock<ICoupon>();
+            mockCoupon.Setup(mock => mock.MinPurchaseAmount).Returns(100);
+
+            //Act            
+            shoppingCart.ApplyCoupon(mockCoupon.Object);
+
+            //Assert
+            mockCoupon.Verify(m => m.GetDiscount(It.IsAny<double>()), Times.Never);
+        }
+
+        [Fact]
+        public void ApplyCoupon_WhenCouponIsNull_ThrowsException()
+        {
+            //Arrange
+            Category category = new Category("Food");
+            Product banana = new Product("Banana", 10, category);
+            Mock<IDeliveryCostCalculator> mockCalculator = new Mock<IDeliveryCostCalculator>();
+            Cart shoppingCart = new Cart(mockCalculator.Object);
+            shoppingCart.AddItem(banana, 6);
+
+            //Act && Assert
+            var exception = Assert.Throws<ArgumentNullException>(() => shoppingCart.ApplyCoupon(null));
+            Assert.Equal("Value cannot be null. (Parameter 'coupon')", exception.Message);
         }
 
         [Fact]

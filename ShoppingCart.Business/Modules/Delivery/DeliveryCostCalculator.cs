@@ -37,7 +37,7 @@ namespace ShoppingCart.Business.Modules
 
             if (cart.productItems.Count == 0)
             {
-                throw new Exception("Shopping Cart is empty!");
+                throw new InvalidOperationException("Shopping Cart is empty!");
             }
 
             int numberOfDelivery = cart.productItems.Keys.ToList().GroupBy(x => x.Category).Count();

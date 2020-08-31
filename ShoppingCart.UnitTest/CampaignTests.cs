@@ -57,6 +57,17 @@ namespace ShoppingCart.UnitTest
         }
 
         [Fact]
+        public void ProduceCampaign_WhenCalledWithNullCategory_ThrowsException()
+        {
+            //Arrange
+            CampaignFactory factory = new CampaignFactory();
+
+            //Act && Assert
+            var exception = Assert.Throws<ArgumentNullException>(() => factory.ProduceCampaign(null, 50, 10, DiscountType.Rate));
+            Assert.Equal("Value cannot be null. (Parameter 'category')", exception.Message);
+        }
+
+        [Fact]
         public void GetDiscount_WhenCalledForAmountCampaign_ReturnsPercentageOfDiscount()
         {
             //Arrange
